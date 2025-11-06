@@ -2,6 +2,7 @@ package com.ashwini.services;
 
 import com.ashwini.client.NagerClient;
 import com.ashwini.model.HolidayData;
+import com.ashwini.model.HolidayInput;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -22,14 +23,14 @@ public class NagerService {
         return nagerClient.getNagerInfoAboutHolidays(countryCode);
     }
 
-    public HashMap<String, Long> getNagerInfoAboutPublicHolidays(String year, List<String> countryCodes) {
-        if (countryCodes.isEmpty()) {
+    public HashMap<String, Long> getNagerInfoAboutPublicHolidays(HolidayInput hoildayInput) {
+        if (hoildayInput.countryCode().isEmpty()) {
             return null;
         }
         HashMap<String, Long> result = new HashMap<>();
-        countryCodes.forEach(countryCode -> {
+        hoildayInput.countryCode().forEach(countryCode -> {
             // check if the countryCode is in available country code.
-            List<HolidayData> holidayDataList = nagerClient.getNagerInfoAboutPublicHolidays(year, countryCode);
+            List<HolidayData> holidayDataList = nagerClient.getNagerInfoAboutPublicHolidays(hoildayInput.year(), countryCode);
             if (holidayDataList != null) {
                result.put(countryCode, holidayDataList.stream()
                         .filter(holidayData -> holidayData.type().contains("Public"))
