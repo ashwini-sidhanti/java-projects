@@ -1,0 +1,15 @@
+#Tue Nov 04 15:28:29 UTC 2025
+micronaut:
+  application:
+    name: demo
+
+  caches:
+    holiday-info-day-cache:
+      expire-after-write: 24h
+      maximum-size: 15000
+
+  http:
+    services:
+      nager:
+        url: https://date.nager.at/api
+
