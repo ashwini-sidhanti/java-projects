@@ -1,5 +1,6 @@
 package com.ashwini.client;
 
+import com.ashwini.model.AvailableCountry;
 import com.ashwini.model.HolidayData;
 import io.micronaut.cache.annotation.Cacheable;
 import io.micronaut.http.MediaType;
@@ -13,6 +14,12 @@ import java.util.List;
 @Client(id = "nager")
 public interface NagerClient {
     @CircuitBreaker(reset = "30s", attempts = "2", delay = "2s", multiplier = "1")
+    @Get(value = "https://date.nager.at/api/v3/AvailableCountries")
+    @Produces(MediaType.APPLICATION_JSON)
+    //@Cacheable(value = "available-country-cache")
+    List<AvailableCountry> getAvailableCountries();
+
+    @CircuitBreaker(reset = "30s", attempts = "2", delay = "2s", multiplier = "1")
     @Get(value = "https://date.nager.at/api/v3/NextPublicHolidays/{countryCode}")
     @Produces(MediaType.APPLICATION_JSON)
     @Cacheable(value = "holiday-info-day-cache")
@@ -21,7 +28,7 @@ public interface NagerClient {
     @CircuitBreaker(reset = "30s", attempts = "2", delay = "2s", multiplier = "1")
     @Get(value = "https://date.nager.at/api/v3/PublicHolidays/{year}/{countryCode}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Cacheable(value = "holiday-info-day-cache")
+    //@Cacheable(value = "public-holiday-info-day-cache")
     List<HolidayData> getNagerInfoAboutPublicHolidays(String year, String countryCode);
 
 }
