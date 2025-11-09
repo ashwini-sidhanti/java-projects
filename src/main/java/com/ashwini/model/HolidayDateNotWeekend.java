@@ -1,4 +1,9 @@
 package com.ashwini.model;
 
-public record HolidayDateNotWeekend() {
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
+
+@Introspected
+@Serdeable
+public record HolidayDateNotWeekend(String CountryName, long count) {
 }
