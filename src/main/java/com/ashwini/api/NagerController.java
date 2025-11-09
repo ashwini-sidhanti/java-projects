@@ -1,5 +1,6 @@
 package com.ashwini.api;
 
+import com.ashwini.exception.CountryCodesEmptyException;
 import com.ashwini.exception.CountryNotFoundException;
 import com.ashwini.model.DedepulicateHolidayDataOutput;
 import com.ashwini.model.DedepulicateHolidayInput;
@@ -41,11 +42,20 @@ public class NagerController {
 
     @Post()
     public List<HolidayDateNotWeekend> getNagerInfoAboutPublicHolidayNotWeekend(@Body HolidayInput holidayInput) {
-        return nagerService.getNagerInfoAboutPublicHolidays(holidayInput);
+        try {
+            return nagerService.getNagerInfoAboutPublicHolidays(holidayInput);
+        } catch (CountryCodesEmptyException exception) {
+            throw new HttpStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        }
     }
 
     @Post("/deduplicated-holidays")
     public List<DedepulicateHolidayDataOutput> getNagerInfoAboutPublicHolidayDeduplicated(@Body DedepulicateHolidayInput dedepulicateHolidayInput) {
-        return nagerService.getNagerInfoAboutDedepulicatedHolidays(dedepulicateHolidayInput);
+        try {
+            return nagerService.getNagerInfoAboutDedepulicatedHolidays(dedepulicateHolidayInput);
+        } catch (CountryCodesEmptyException exception) {
+            throw new HttpStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 package com.ashwini.services;
 
 import com.ashwini.client.NagerClient;
+import com.ashwini.exception.CountryCodesEmptyException;
 import com.ashwini.exception.CountryNotFoundException;
 import com.ashwini.model.AvailableCountry;
 import com.ashwini.model.DedepulicateHolidayDataOutput;
@@ -46,17 +47,17 @@ public class NagerService {
                 .toList();
     }
 
-    public List<HolidayDateNotWeekend> getNagerInfoAboutPublicHolidays(HolidayInput hoildayInput) {
-        if (hoildayInput.countryCode().isEmpty()) {
-            return null;
+    public List<HolidayDateNotWeekend> getNagerInfoAboutPublicHolidays(HolidayInput holidayInput) throws CountryCodesEmptyException {
+        if (holidayInput.countryCode().isEmpty()) {
+            throw new CountryCodesEmptyException();
         }
         List<HolidayDateNotWeekend> result = new ArrayList<>();
-        hoildayInput.countryCode().forEach(countryCode -> {
+        holidayInput.countryCode().forEach(countryCode -> {
             AvailableCountry availableCountryResult = nagerClient.getAvailableCountries().stream()
-                    .filter(availableCountry -> availableCountry.countryCode().equalsIgnoreCase(countryCode)).findFirst().orElse(null );
+                    .filter(availableCountry -> availableCountry.countryCode().equalsIgnoreCase(countryCode)).findFirst().orElse(null);
 
             if (availableCountryResult != null) {
-                List<HolidayData> holidayDataList = nagerClient.getNagerInfoAboutPublicHolidays(hoildayInput.year(), countryCode);
+                List<HolidayData> holidayDataList = nagerClient.getNagerInfoAboutPublicHolidays(holidayInput.year(), countryCode);
                 if (holidayDataList != null) {
                     result.add(new HolidayDateNotWeekend(availableCountryResult.name(), holidayDataList.stream()
                             .filter(holidayData -> holidayData.type().contains("Public"))
@@ -69,11 +70,14 @@ public class NagerService {
 
     }
 
-    public List<DedepulicateHolidayDataOutput> getNagerInfoAboutDedepulicatedHolidays(DedepulicateHolidayInput dedepulicateHolidayInput) {
+    public List<DedepulicateHolidayDataOutput> getNagerInfoAboutDedepulicatedHolidays(DedepulicateHolidayInput dedepulicateHolidayInput) throws CountryCodesEmptyException {
         List<HolidayData> firstHolidayData = nagerClient.getNagerInfoAboutPublicHolidays(dedepulicateHolidayInput.year(),
                 dedepulicateHolidayInput.firstCountryCode());
         List<HolidayData> secondHolidayData = nagerClient.getNagerInfoAboutPublicHolidays(dedepulicateHolidayInput.year(),
                 dedepulicateHolidayInput.secondCountryCode());
+        if (firstHolidayData == null || secondHolidayData == null) {
+            throw new CountryCodesEmptyException();
+        }
         return Stream.concat(firstHolidayData.stream(), secondHolidayData.stream())
                 .filter(distinctByKey(HolidayData::name))
                 .toList().stream()
