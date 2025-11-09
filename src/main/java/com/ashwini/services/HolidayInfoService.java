@@ -26,11 +26,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Singleton
-public class NagerService {
+public class HolidayInfoService {
     private final NagerClient nagerClient;
 
     @Inject
-    public NagerService(NagerClient nagerClient) {
+    public HolidayInfoService(NagerClient nagerClient) {
         this.nagerClient = nagerClient;
     }
 
@@ -47,7 +47,7 @@ public class NagerService {
                 .toList();
     }
 
-    public List<HolidayDateNotWeekend> getNagerInfoAboutPublicHolidays(HolidayInput holidayInput) throws CountryCodesEmptyException {
+    public List<HolidayDateNotWeekend> getInfoAboutPublicHolidays(HolidayInput holidayInput) throws CountryCodesEmptyException {
         if (holidayInput.countryCode().isEmpty()) {
             throw new CountryCodesEmptyException();
         }
@@ -70,7 +70,7 @@ public class NagerService {
 
     }
 
-    public List<DedepulicateHolidayDataOutput> getNagerInfoAboutDedepulicatedHolidays(DedepulicateHolidayInput dedepulicateHolidayInput) throws CountryCodesEmptyException {
+    public List<DedepulicateHolidayDataOutput> getInfoAboutDedepulicatedHolidays(DedepulicateHolidayInput dedepulicateHolidayInput) throws CountryCodesEmptyException {
         List<HolidayData> firstHolidayData = nagerClient.getNagerInfoAboutPublicHolidays(dedepulicateHolidayInput.year(),
                 dedepulicateHolidayInput.firstCountryCode());
         List<HolidayData> secondHolidayData = nagerClient.getNagerInfoAboutPublicHolidays(dedepulicateHolidayInput.year(),

@@ -49,13 +49,13 @@ For a smoother experience, Postman is recommended — it allows you to send requ
 
   | Method         | Endpoint                           | Description                                                                     |
   | -------------- | ---------------------------------- | ------------------------------------------------------------------------------- |
-  | `GET`          | `/api/nager/{country}`             | Returns last 3 holidays for the give country (only for the current year)        |
-  | `POST`         | `/api/nager/`                      | Returns count of holidays not on a weekend a specific year for a country codes  |
-  | `POST`         | `/api/nager/deduplicated-holidays` | Returns a deduplicated list of holidays celebrated in both countries            |
+  | `GET`          | `/api/holiday-info/{country}`             | Returns last 3 holidays for the give country (only for the current year)        |
+  | `POST`         | `/api/holiday-info/`                      | Returns count of holidays not on a weekend a specific year for a country codes  |
+  | `POST`         | `/api/holiday-info/deduplicated-holidays` | Returns a deduplicated list of holidays celebrated in both countries            |
 
 
 Respective Json responses:
-- **GET** `/api/nager/{countryName}`
+- **GET** `/api/holiday-info/{countryName}`
   - Response
 ```json
 [
@@ -65,7 +65,7 @@ Respective Json responses:
     }
 ]
 ```
-- **POST** `/api/nager/`
+- **POST** `/api/holiday-info/`
   - Request
 ```JSON
  {
@@ -94,7 +94,7 @@ Respective Json responses:
     }
 ]
 ```
-- **POST** `/api/nager/deduplicated-holidays`
+- **POST** `/api/holiday-info/deduplicated-holidays`
   - Request
 ```json
 {

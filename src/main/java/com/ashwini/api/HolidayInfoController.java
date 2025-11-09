@@ -7,7 +7,7 @@ import com.ashwini.model.DedepulicateHolidayInput;
 import com.ashwini.model.HolidayDateNotWeekend;
 import com.ashwini.model.HolidayInput;
 import com.ashwini.model.LastThreeHolidayData;
-import com.ashwini.services.NagerService;
+import com.ashwini.services.HolidayInfoService;
 import com.github.javaparser.quality.NotNull;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
@@ -22,37 +22,37 @@ import jakarta.inject.Inject;
 import java.util.List;
 
 @ExecuteOn(TaskExecutors.IO)
-@Controller("/api/nager")
-public class NagerController {
-    NagerService nagerService;
+@Controller("/api/holiday-info")
+public class HolidayInfoController {
+    HolidayInfoService holidayInfoService;
 
     @Inject
-    public NagerController(NagerService nagerService) {
-        this.nagerService = nagerService;
+    public HolidayInfoController(HolidayInfoService holidayInfoService) {
+        this.holidayInfoService = holidayInfoService;
     }
 
     @Get("/{officialName}")
     public List<LastThreeHolidayData> getLastThreeHolidayInfo(@NotNull String officialName) {
         try {
-            return nagerService.getLastThreeHolidayInfo(officialName);
+            return holidayInfoService.getLastThreeHolidayInfo(officialName);
         } catch (CountryNotFoundException exception) {
             throw new HttpStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
         }
     }
 
     @Post()
-    public List<HolidayDateNotWeekend> getNagerInfoAboutPublicHolidayNotWeekend(@Body HolidayInput holidayInput) {
+    public List<HolidayDateNotWeekend> getInfoAboutPublicHolidayNotWeekend(@Body HolidayInput holidayInput) {
         try {
-            return nagerService.getNagerInfoAboutPublicHolidays(holidayInput);
+            return holidayInfoService.getInfoAboutPublicHolidays(holidayInput);
         } catch (CountryCodesEmptyException exception) {
             throw new HttpStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
     }
 
     @Post("/deduplicated-holidays")
-    public List<DedepulicateHolidayDataOutput> getNagerInfoAboutPublicHolidayDeduplicated(@Body DedepulicateHolidayInput dedepulicateHolidayInput) {
+    public List<DedepulicateHolidayDataOutput> getInfoAboutPublicHolidayDeduplicated(@Body DedepulicateHolidayInput dedepulicateHolidayInput) {
         try {
-            return nagerService.getNagerInfoAboutDedepulicatedHolidays(dedepulicateHolidayInput);
+            return holidayInfoService.getInfoAboutDedepulicatedHolidays(dedepulicateHolidayInput);
         } catch (CountryCodesEmptyException exception) {
             throw new HttpStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
