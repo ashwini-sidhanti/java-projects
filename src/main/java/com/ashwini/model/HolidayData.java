@@ -14,7 +14,7 @@ public record HolidayData(@JsonProperty("date") @Format("yyyy-MM-dd") LocalDate 
                           @JsonProperty("countryCode") String countryCode,
                           @JsonProperty("fixed") boolean fixedHoliday,
                           @JsonProperty("global") boolean global,
-                          @JsonProperty("counties") String counties,
+                          @JsonProperty("counties") List<String> counties,
                           @JsonProperty("launchYear") String launchYear,
                           @JsonProperty("types") List<String> type
                           ) {

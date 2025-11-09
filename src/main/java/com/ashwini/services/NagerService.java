@@ -1,6 +1,7 @@
 package com.ashwini.services;
 
 import com.ashwini.client.NagerClient;
+import com.ashwini.exception.CountryNotFoundException;
 import com.ashwini.model.AvailableCountry;
 import com.ashwini.model.DedepulicateHolidayDataOutput;
 import com.ashwini.model.DedepulicateHolidayInput;
@@ -32,10 +33,10 @@ public class NagerService {
         this.nagerClient = nagerClient;
     }
 
-    public List<LastThreeHolidayData> getLastThreeHolidayInfo(String officialName) {
+    public List<LastThreeHolidayData> getLastThreeHolidayInfo(String officialName) throws CountryNotFoundException {
         AvailableCountry availableCountryResult = getAvailableCountry(officialName);
         if (availableCountryResult == null) {
-            return null;
+            throw new CountryNotFoundException(officialName);
         }
         return nagerClient.getNagerInfoAboutPublicHolidays(String.valueOf(LocalDate.now().getYear()), availableCountryResult.countryCode()).stream()
                 .filter(holidayData -> holidayData.date().isBefore(LocalDate.now()))
@@ -52,7 +53,7 @@ public class NagerService {
         List<HolidayDateNotWeekend> result = new ArrayList<>();
         hoildayInput.countryCode().forEach(countryCode -> {
             AvailableCountry availableCountryResult = nagerClient.getAvailableCountries().stream()
-                    .filter(availableCountry -> availableCountry.countryCode().equalsIgnoreCase(countryCode)).findFirst().orElse(null);
+                    .filter(availableCountry -> availableCountry.countryCode().equalsIgnoreCase(countryCode)).findFirst().orElse(null );
 
             if (availableCountryResult != null) {
                 List<HolidayData> holidayDataList = nagerClient.getNagerInfoAboutPublicHolidays(hoildayInput.year(), countryCode);
