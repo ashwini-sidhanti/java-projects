@@ -19,9 +19,9 @@ using the [Nager](https://date.nager.at) API. The service does not include a fal
 failure, it returns a 500 Internal Server Error.
 
 ## Features
-- getLastThreeHolidayInfo — Given a country, return the last celebrated 3 holidays (date and name)
-- getNagerInfoAboutPublicHolidayNotWeekend — Given a year and country codes, for each country return a number of public holidays not falling on weekends (sort in descending order)
-- getNagerInfoAboutPublicHolidayDeduplicated - Given a year and 2 country codes, return the deduplicated list of dates celebrated in both countries (date + local names)
+- Given a country name, return the last celebrated 3 holidays (date and name)
+- Given a year and a list country code, for each country return a number of public holidays not falling on weekends (sort in descending order)
+- Given a year and 2 country codes, return the deduplicated list of dates celebrated in both countries (date + local names)
 
 ## Getting Started
 This project is publicly available and may be used for legal purposes.
