@@ -55,6 +55,8 @@ public class HolidayInfoController {
             return holidayInfoService.getInfoAboutDedepulicatedHolidays(dedepulicateHolidayInput);
         } catch (CountryCodesEmptyException exception) {
             throw new HttpStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        } catch (CountryNotFoundException exception) {
+            throw new HttpStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
         }
 
     }

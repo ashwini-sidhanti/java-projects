@@ -70,12 +70,14 @@ public class HolidayInfoService {
 
     }
 
-    public List<DedepulicateHolidayDataOutput> getInfoAboutDedepulicatedHolidays(DedepulicateHolidayInput dedepulicateHolidayInput) throws CountryCodesEmptyException {
+    public List<DedepulicateHolidayDataOutput> getInfoAboutDedepulicatedHolidays(DedepulicateHolidayInput dedepulicateHolidayInput) throws CountryCodesEmptyException, CountryNotFoundException {
+        checkAvailableCountry(dedepulicateHolidayInput.firstCountryCode());
+        checkAvailableCountry(dedepulicateHolidayInput.secondCountryCode());
         List<HolidayData> firstHolidayData = nagerClient.getNagerInfoAboutPublicHolidays(dedepulicateHolidayInput.year(),
                 dedepulicateHolidayInput.firstCountryCode());
         List<HolidayData> secondHolidayData = nagerClient.getNagerInfoAboutPublicHolidays(dedepulicateHolidayInput.year(),
                 dedepulicateHolidayInput.secondCountryCode());
-        if (firstHolidayData == null || secondHolidayData == null) {
+        if (firstHolidayData == null && secondHolidayData == null) {
             throw new CountryCodesEmptyException();
         }
         return Stream.concat(firstHolidayData.stream(), secondHolidayData.stream())
@@ -93,6 +95,12 @@ public class HolidayInfoService {
         return nagerClient.getAvailableCountries().stream()
                 .filter(availableCountry -> availableCountry.name().equalsIgnoreCase(officialName))
                 .findFirst().orElse(null);
+    }
+
+    private void checkAvailableCountry(String countryCode) throws CountryNotFoundException {
+        nagerClient.getAvailableCountries().stream()
+                .filter(availableCountry -> availableCountry.countryCode().equalsIgnoreCase(countryCode))
+                .findFirst().orElseThrow(() -> new CountryNotFoundException(countryCode));
     }
 
 }
